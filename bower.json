@@ -1,0 +1,25 @@
+{
+  "license": "AGPL-3.0",
+  "name": "purescript-vega",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output",
+    "result"
+  ],
+  "dependencies": {
+    "purescript-argonaut-core": "^3.1.1",
+    "purescript-dom": "^4.16.0",
+    "purescript-foreign": "^4.0.1",
+    "purescript-prelude": "^3.3.0",
+    "purescript-these": "^3.1.0"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^3.0.0"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/colehaus/purescript-vega.git"
+  }
+}
