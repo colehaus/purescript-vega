@@ -2,12 +2,11 @@ module Charts.Vega.Primitive.Internal where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import DOM (DOM)
-import Data.Foreign (Foreign)
+import Effect (Effect)
+import Foreign (Foreign)
 
 foreign import data View :: Type
 
-foreign import removeData :: forall e. String -> Foreign -> View -> Eff (dom :: DOM | e) Unit
-foreign import insertData :: forall e. String -> Foreign -> View -> Eff (dom :: DOM | e) Unit
-foreign import insertAndRemoveData :: forall e. String -> Foreign -> Foreign -> View -> Eff (dom :: DOM | e) Unit
+foreign import removeData :: String -> Foreign -> View -> Effect Unit
+foreign import insertData :: String -> Foreign -> View -> Effect Unit
+foreign import insertAndRemoveData :: String -> Foreign -> Foreign -> View -> Effect Unit

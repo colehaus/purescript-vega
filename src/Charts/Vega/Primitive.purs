@@ -5,11 +5,12 @@ module Charts.Vega.Primitive
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-import DOM (DOM)
-import Data.Argonaut.Core (Json, JObject)
-import Data.Foreign (toForeign)
+import Data.Argonaut.Core (Json)
 import Data.These (These(..))
+import Effect (Effect)
+import Foreign (unsafeToForeign)
+import Foreign.Object (Object)
+
 import Charts.Vega.Primitive.Internal (View) as ForReExport
 import Charts.Vega.Primitive.Internal (View, insertAndRemoveData, insertData, removeData)
 
@@ -18,26 +19,25 @@ type ChartOpts = Json
 type Selector = String
 
 foreign import embed ::
-  forall e.
      Selector
   -> Chart
   -> ChartOpts
-  -> (View -> Eff (dom :: DOM | e) Unit)
-  -> Eff (dom :: DOM | e) Unit
+  -> (View -> Effect Unit)
+  -> Effect Unit
 
 data Remove
-  = ByPredicate (JObject -> Boolean)
-  | ByPoints (Array JObject)
+  = ByPredicate (Object Json -> Boolean)
+  | ByPoints (Array (Object Json))
 
-type ChangeSet = These { remove :: Remove } { insert :: Array JObject }
+type ChangeSet = These { remove :: Remove } { insert :: Array (Object Json) }
 
-changeData :: forall e. String -> ChangeSet -> View -> Eff (dom :: DOM | e) Unit
+changeData :: String -> ChangeSet -> View -> Effect Unit
 changeData dataName (This { remove }) view =
   case remove of
-    ByPredicate pred -> removeData dataName (toForeign pred) view
-    ByPoints points -> removeData dataName (toForeign points) view
-changeData dataName (That { insert }) view = insertData dataName (toForeign insert) view
+    ByPredicate pred -> removeData dataName (unsafeToForeign pred) view
+    ByPoints points -> removeData dataName (unsafeToForeign points) view
+changeData dataName (That { insert }) view = insertData dataName (unsafeToForeign insert) view
 changeData dataName (Both { remove } { insert }) view =
   case remove of
-    ByPredicate pred -> insertAndRemoveData dataName (toForeign insert) (toForeign pred) view
-    ByPoints points -> insertAndRemoveData dataName (toForeign insert) (toForeign points) view
+    ByPredicate pred -> insertAndRemoveData dataName (unsafeToForeign insert) (unsafeToForeign pred) view
+    ByPoints points -> insertAndRemoveData dataName (unsafeToForeign insert) (unsafeToForeign points) view
